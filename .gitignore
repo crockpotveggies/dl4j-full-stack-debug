@@ -6,6 +6,7 @@ logs/
 *.log
 *.ipynb_checkpoints
 *.pyc
+.gradle/
 graph-tmp/
 cnn_dataset/
 

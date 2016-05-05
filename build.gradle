@@ -10,12 +10,12 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-description = """dl4j-ethnicity-test"""
+description = """libnd4j-SIGFPE-error"""
 
 group = 'ai.bernie'
 version = '0.1-SNAPSHOT'
 applicationName = 'bernie-api'
-mainClassName = 'ai.bernie.researchtests.TrainNetSpark'
+mainClassName = 'ai.bernie.researchtests.TrainNetStandalone'
 compileJava.options.encoding = 'UTF-8'
 
 applicationDefaultJvmArgs = ["-Dgreeting.language=en","-Xms512m","-Xmx6096m"]
@@ -34,8 +34,8 @@ tasks.withType(ScalaCompile) {
     memoryMaximumSize = '4g'
   }
   scalaCompileOptions.useAnt = false
-  sourceCompatibility = "1.8"
-  targetCompatibility = "1.8"
+  sourceCompatibility = "1.7"
+  targetCompatibility = "1.7"
 //  useCompileDaemon = true
 }
 
@@ -59,7 +59,7 @@ dependencies {
   compile "org.scala-lang:scala-reflect:2.10.5"
 
   // Spark
-  compile('org.apache.spark:spark-core_2.11:1.6.1') {
+  compile('org.apache.spark:spark-core_2.10:1.6.1') {
     exclude group: 'com.google.guava'
     // yields security error due to differing versions
     exclude group: 'org.eclipse.jetty.orbit', module: 'javax.servlet'
@@ -76,7 +76,7 @@ dependencies {
   compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
   compile 'com.fasterxml.jackson.module:jackson-module-scala_2.10:2.6.3'
 
-  compile 'org.deeplearning4j:deeplearning4j-nlp:0.4-rc3.9-SNAPSHOT'
+  compile 'org.deeplearning4j:deeplearning4j-core:0.4-rc3.9-SNAPSHOT'
   compile 'org.deeplearning4j:deeplearning4j-ui:0.4-rc3.9-SNAPSHOT'
   compile 'org.deeplearning4j:dl4j-spark:0.4-rc3.9-SNAPSHOT'
   compile 'org.nd4j:nd4j-native:0.4-rc3.9-SNAPSHOT'
@@ -96,4 +96,5 @@ shadowJar {
   transform(com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer) {
     resource = 'reference.conf'
   }
+  zip64 = true
 }
