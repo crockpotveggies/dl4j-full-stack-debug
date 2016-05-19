@@ -1,4 +1,4 @@
-libnd4j SIGFPE Fatal Error
+DL4J Full Stack Debug Repo
 ==========================
 
 Encountered a fatal error during Spark training of a convolutional net on JVM 1.8. Appears related to libnd4j. 
