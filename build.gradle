@@ -1,7 +1,7 @@
 buildscript {
   repositories { jcenter() }
   dependencies {
-    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
   }
 }
 
@@ -20,7 +20,14 @@ compileJava.options.encoding = 'UTF-8'
 
 applicationDefaultJvmArgs = ["-Dgreeting.language=en","-Xms512m","-Xmx6096m"]
 
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.13' //version required
+}
+
 repositories {
+  mavenLocal()
+  mavenCentral()
+"~/dl4j-ethnicity-test/build.gradle" 130L, 4271C                                                                             1,1           Top
   mavenLocal()
   mavenCentral()
 //  maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
@@ -39,15 +46,39 @@ tasks.withType(ScalaCompile) {
 //  useCompileDaemon = true
 }
 
+switch(libnd4jOS) {
+  case 'windows':
+    libnd4jOS = 'win-x86_64'
+    break
+  case 'linux':
+    libnd4jOS = 'linux-x86_64'
+    break
+  case 'linux-ppc64':
+    libnd4jOS = 'linux-ppc64'
+    break
+                                                                                                                             28,3          26%
+    libnd4jOS = 'linux-ppc64'
+    break
+  case 'linux-ppc64le':
+    libnd4jOS = 'linux-ppc64le'
+    break
+  case 'macosx':
+    libnd4jOS = 'macosx-x86_64'
+    break
+  default:
+    throw new Exception('Unknown OS defined for -Plibnd4jOS parameter. ND4J will be unable to find platform-specific binaries and thus unable to run.')
+}
+
 configurations {
   all {
     exclude group: 'org.mortbay.jetty'
-    exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-    exclude group: 'log4j', module: 'log4j'
+//    exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+//    exclude group: 'log4j', module: 'log4j'
     exclude group: 'org.fusesource.scalate'
     exclude group: 'com.sun.jersey.jersey-test-framework', module: 'jersey-test-framework-grizzly2'
     exclude group: 'com.sun.jersey', module: 'jersey-json'
     exclude group: 'com.sun.jersey', module: 'jersey-core'
+    exclude group: 'org.bytedeco', module: 'javacpp-presets'
   }
 }
 
@@ -76,10 +107,14 @@ dependencies {
   compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
   compile 'com.fasterxml.jackson.module:jackson-module-scala_2.10:2.6.3'
 
-  compile 'org.deeplearning4j:deeplearning4j-core:0.4-rc3.9-SNAPSHOT'
-  compile 'org.deeplearning4j:deeplearning4j-ui:0.4-rc3.9-SNAPSHOT'
-  compile 'org.deeplearning4j:dl4j-spark:0.4-rc3.9-SNAPSHOT'
-  compile 'org.nd4j:nd4j-native:0.4-rc3.9-SNAPSHOT'
+  compile 'org.deeplearning4j:deeplearning4j-core:0.4-rc3.10-SNAPSHOT'
+//  compile 'org.deeplearning4j:deeplearning4j-ui:0.4-rc3.10-SNAPSHOT'
+  compile 'org.deeplearning4j:dl4j-spark:0.4-rc3.10-SNAPSHOT'
+  compile 'org.nd4j:nd4j-native:0.4-rc3.10-SNAPSHOT'
+  compile 'org.nd4j:nd4j-native:0.4-rc3.10-SNAPSHOT:'+libnd4jOS
+  compile 'org.bytedeco:javacpp:1.2'
+  compile 'org.bytedeco.javacpp-presets:opencv:3.1.0-1.2'
+  compile 'org.bytedeco.javacpp-presets:opencv:3.1.0-1.2:'+libnd4jOS
   compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
 
   compile 'javax.mail:javax.mail-api:1.5.5'
